@@ -1,0 +1,57 @@
+{%extends 'music/master.html'%}
+{%block title%}{{data.title}}{%endblock%}
+{%block body%}
+{%load ratings%}
+<div class="container mt-4 ml-10 mr-4">
+    <div class="row">
+      <div class="col">
+      <div class="card" style="width: 18rem;">
+        <img class="card-img-top" src="{{data.image.url}}" alt="Card image cap" height="100px">
+        <div class="card-body">
+          <h5 class="card-title">{{data.title}}</h5>
+          <p><h6>{{data.artist}}{{data.release}}</h6></p>
+          <a href="{%url 'music:addsong' data.id%}" class="btn btn-primary">add songs</a>
+          <p>{% ratings data%}</p>
+        </div>
+      </div>
+      </div>
+<div class="col">      
+{%if data.song_set.all%}
+<table class="table table-bordered table-primary">
+    <thead>
+        <td>TITLE</td>
+        <td>ARTIST</td>
+        <td>GENRE</td>
+        <td>LYRICIST</td>
+        <td>ACTION</td>
+        {%if request.user.is_authenticated%} <td>MODIFY</td>{% endif %}
+        <td>RATING</td>
+    </thead>
+    {% load ratings%}}
+{%for i in data.song_set.all%}
+<tr>
+    <td>{{i.title}}</td>
+    <td>{{i.artist}}</td>
+    <td>{{i.genre}}</td>
+    <td>{{i.lyricist}}</td>
+    <td><audio controls='controls'><source src="{{i.file.url}}" type="audio/mpeg"></audio></td>
+    {%if request.user.is_authenticated %}
+    <td>
+      <p>
+        <a href="{% url 'music:upsong' i.id%}" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">up song</a>
+        <a href="{% url 'music:delsong' i.id%}" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">del song</a>
+      </p>
+    </td>
+    {%endif%}
+    <td>{%ratings i%}</td>
+</tr>  
+
+{%endfor%}
+
+{%else%}
+<h1>no song to display</h1>
+{%endif%}
+</div>
+</div>
+</div>
+{%endblock%}

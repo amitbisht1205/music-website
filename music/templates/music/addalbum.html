@@ -1,0 +1,11 @@
+{%extends 'music/master.html'%}
+{%block title%}add album page{%endblock%}
+{%block body%}
+<form method="post" enctype="multipart/form-data">
+{%csrf_token%}
+<table>
+{{form.as_table}}
+</table>
+<input type="submit" value="login">
+</form>
+{%endblock%}
